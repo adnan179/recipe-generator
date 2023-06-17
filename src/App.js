@@ -100,7 +100,7 @@ function App() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 overflow-hidden">
       <h1 className="text-4xl phone:text-xl font-bold mb-8 font-pacifico text-[#0039a6]">
         Tasty Temptations: Recipe Revelations
       </h1>
