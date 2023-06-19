@@ -55,31 +55,47 @@ function App() {
     setMethod(!method);
   };
 
-  //func to filter the recipes from the recipeData.json from given inputs
+  // func to filter the recipes from the recipeData.json from given inputs
+  // func to filter the recipes from the recipeData.json from given inputs
   const filterRecipes = () => {
     const keywords = searchTerm
       .toLowerCase()
       .split(",")
       .map((keyword) => keyword.trim());
-    return recipeData.filter((recipe) => {
-      const isMatchingCategory =
-        searchCategory === "name"
-          ? keywords.some((keyword) =>
-              recipe.Name.toLowerCase().includes(keyword)
-            )
-          : searchCategory === "ingredients";
-      keywords.every((keyword) =>
-        recipe.Ingredients.some((ingredient) =>
-          ingredient.toLowerCase().includes(keyword)
-        )
-      );
 
+    return recipeData.filter((recipe) => {
       const isMatchingCuisine =
         selectedCuisine === "All" || recipe.Cuisine === selectedCuisine;
       const isMatchingMealType =
         selectedMealType === "All" || recipe.MealType === selectedMealType;
 
-      return isMatchingCategory && isMatchingCuisine && isMatchingMealType;
+      if (!searchTerm) {
+        return isMatchingCuisine && isMatchingMealType;
+      }
+
+      const searchTermLower = searchTerm.toLowerCase();
+
+      if (searchCategory === "name") {
+        const nameLower = recipe.Name.toLowerCase();
+        return (
+          (nameLower.includes(searchTermLower) ||
+            nameLower.startsWith(searchTermLower)) &&
+          isMatchingCuisine &&
+          isMatchingMealType
+        );
+      }
+
+      if (searchCategory === "ingredients") {
+        return (
+          recipe.Ingredients.some((ingredient) =>
+            ingredient.toLowerCase().includes(searchTermLower)
+          ) &&
+          isMatchingCuisine &&
+          isMatchingMealType
+        );
+      }
+
+      return false;
     });
   };
 
